@@ -22,7 +22,7 @@ public class ProviderImpl<T> implements Provider<T> {
     private final Injector injector;
 
     public static <T> Provider<T> singletorOf(Class<? extends T> tClass, Injector injector){
-        return new ProviderImpl<T>(tClass,Type.SINGLETON, injector);
+        return new ProviderImpl<>(tClass,Type.SINGLETON, injector);
     }
 
     public static <T> Provider<T> prototypeOf(Class<T> tClass, Injector injector){
@@ -97,10 +97,9 @@ public class ProviderImpl<T> implements Provider<T> {
 
         Class<?>[] parameterTypes = constructor.getParameterTypes();
 
-        for (int i = 0; i < parameterTypes.length; i++) {
-            Class<?> parameterType = parameterTypes[i];
+        for (Class<?> parameterType : parameterTypes) {
             Provider<?> provider = injector.getProvider(parameterType);
-            if (provider == null){
+            if (provider == null) {
                 throw new BindingNotFoundException(parameterType + " not found");
             }
             result.add(provider);
